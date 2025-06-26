@@ -1,22 +1,22 @@
 # Project Organization
 
-This document describes the organizational principles behind the SGLang RAG Demo project structure.
+This document describes how the SGLang RAG Demo project files are organized.
 
 ## Root Level Philosophy
 
-The root directory follows the "essential files only" principle:
+The root directory contains only essential files:
 
-### Core Files (Must Stay at Root)
-- `README.md` - First thing users see, project overview
-- `LICENSE` - Legal requirement for open source
-- `pyproject.toml` - Modern Python packaging standard
-- `requirements*.txt` - Dependency management (pip standard)
-- `.gitignore` - Version control configuration
-- `.env.example` - Environment template for users
+### Core Files
+- `README.md` - Project overview and usage instructions
+- `LICENSE` - Apache 2.0 license text
+- `pyproject.toml` - Python package configuration and metadata
+- `requirements*.txt` - Python dependencies for production and development
+- `.gitignore` - Files and directories excluded from version control
+- `.env.example` - Template showing required environment variables
 
-### Entry Points (Must Stay at Root)
-- `main.py` - CLI interface entry point
-- `web.py` - Web interface entry point
+### Entry Points
+- `main.py` - Command-line interface for the RAG system
+- `web.py` - Streamlit web application interface
 
 ### Hidden Configuration
 - `.env` - Local environment (gitignored)
@@ -28,25 +28,25 @@ The root directory follows the "essential files only" principle:
 ### Source Code Organization
 ```
 src/
-├── rag_system/          # Core RAG functionality
-├── sglang/              # SGLang integration  
-├── web/                 # Web interface components
-└── config.py            # Configuration management
+├── rag_system/          # Document processing and vector search
+├── sglang/              # SGLang prompt templates and LLM integration  
+├── web/                 # Streamlit interface components
+└── config.py            # Application configuration loader
 ```
 
 ### Development Support
 ```
-tests/                   # All testing code
-scripts/                 # Utility and build scripts
-notebooks/               # Analysis and demos
-docs/                    # All documentation
-config/                  # Configuration files
-data/                    # Data and results
+tests/                   # Unit tests, end-to-end tests, and smoke tests
+scripts/                 # Benchmarking, indexing, and documentation scripts
+notebooks/               # Jupyter notebooks for performance analysis
+docs/                    # Project documentation and changelogs
+config/                  # YAML configuration files
+data/                    # Sample documents and benchmark results
 ```
 
-## Documentation Consolidation
+## Documentation Structure
 
-All documentation is now centralized in `docs/`:
+Documentation files are stored in `docs/`:
 - Project documentation (PROJECT_STRUCTURE.md, etc.)
 - MkDocs configuration and source
 - Changelog and release notes

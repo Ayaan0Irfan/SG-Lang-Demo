@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
-SGLang RAG Demo - Main CLI Entry Point
-Professional command-line interface for the RAG system
+Command-line interface for the SGLang RAG system with options for interactive queries and batch processing
 """
 
 import sys
@@ -16,7 +15,7 @@ from config import config
 
 
 def main():
-    """Main CLI interface"""
+    """Parses command line arguments and runs interactive or batch query mode"""
     parser = argparse.ArgumentParser(
         description="SGLang RAG Demo - Professional RAG System",
         formatter_class=argparse.RawDescriptionHelpFormatter,

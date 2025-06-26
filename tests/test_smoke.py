@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
-Smoke Test - Basic RAG System Validation
-Proves that document ingestion + LLM query pipeline works end-to-end
+Smoke test that verifies basic document loading and query functionality with minimal test data
 """
 
 import sys
@@ -15,7 +14,7 @@ sys.path.append(str(Path(__file__).parent.parent / "src"))
 from rag_system import RAGSystem
 
 def create_test_documents() -> Path:
-    """Create minimal test corpus with known facts"""
+    """Creates temporary directory with test documents containing known facts"""
     
     # Create temporary directory for test documents
     temp_dir = Path(tempfile.mkdtemp(prefix="smoke_test_"))

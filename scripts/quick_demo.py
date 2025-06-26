@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
-Quick Demo - Test core RAG functionality
-Demonstrates document loading, indexing, and querying
+Script that runs predefined queries against the RAG system to demonstrate basic functionality
 """
 
 import sys
@@ -14,7 +13,7 @@ from rag_system import RAGSystem
 import time
 
 def main():
-    """Run a quick demonstration of RAG capabilities"""
+    """Initializes RAG system and runs sample queries to show document retrieval and response generation"""
     print("🚀 SGLang RAG System - Quick Demo")
     print("=" * 50)
     

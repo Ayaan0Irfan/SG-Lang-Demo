@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
-End-to-end test - Verifies complete RAG pipeline
-Tests document loading, indexing, and querying with real data
+End-to-end test that verifies the complete RAG pipeline from document loading through query response
 """
 
 import sys
@@ -14,7 +13,7 @@ from rag_system import RAGSystem
 import time
 
 def test_complete_pipeline():
-    """Test the complete RAG pipeline end-to-end"""
+    """Tests document loading, vector indexing, and query processing in sequence"""
     print("🧪 Running end-to-end RAG pipeline test...")
     
     # Initialize system
@@ -53,7 +52,7 @@ def test_complete_pipeline():
     return True
 
 def test_performance_baseline():
-    """Test performance meets baseline requirements"""
+    """Tests that query response times stay under 5 seconds per query"""
     print("\n📊 Running performance baseline test...")
     
     rag = RAGSystem()

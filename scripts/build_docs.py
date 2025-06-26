@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
-Documentation Build Script
-Builds and serves the project documentation using MkDocs
+Script that builds static documentation using MkDocs or serves it locally for development
 """
 
 import subprocess
@@ -10,7 +9,7 @@ import argparse
 from pathlib import Path
 
 def build_docs(serve=False, clean=False):
-    """Build or serve documentation"""
+    """Runs MkDocs build or serve command based on parameters"""
     
     docs_dir = Path(__file__).parent.parent / "docs"
     

@@ -1,6 +1,5 @@
 """
-Test Suite for RAG System
-Professional testing for the core RAG components
+Unit tests for RAG system components including vector store, document processing, and LLM integration
 """
 
 import pytest
@@ -14,17 +13,17 @@ from rag_system import VectorStore, DocumentChunk, LLMProvider, DocumentProcesso
 
 
 class TestVectorStore:
-    """Test the vector store functionality"""
+    """Tests for vector store initialization and document chunk operations"""
     
     def test_vector_store_initialization(self):
-        """Test vector store can be initialized"""
+        """Tests that vector store initializes with correct default settings"""
         store = VectorStore()
         assert store.dimension == 384  # MiniLM dimension
         assert not store.is_built
         assert len(store.chunks) == 0
     
     def test_document_chunk_creation(self):
-        """Test document chunk data structure"""
+        """Tests that DocumentChunk objects store text and metadata correctly"""
         chunk = DocumentChunk(
             id="test123",
             text="This is a test document",

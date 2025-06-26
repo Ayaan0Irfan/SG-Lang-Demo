@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
-Build Vector Index - Preprocessing script
-Creates FAISS vector index from documents in data/documents/
+Script that processes documents in data/documents/ and creates a FAISS vector index for search
 """
 
 import sys
@@ -14,7 +13,7 @@ from rag_system import RAGSystem
 import time
 
 def main():
-    """Build vector index from documents"""
+    """Loads documents from data directory and builds searchable vector index"""
     print("🔧 Building vector index from documents...")
     start_time = time.time()
     

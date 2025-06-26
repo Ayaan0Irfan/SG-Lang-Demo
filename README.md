@@ -1,5 +1,5 @@
 # SGLang RAG System
-A professional-grade Retrieval-Augmented Generation (RAG) system with SGLang integration.
+A retrieval-augmented generation system that combines vector search with language model generation using SGLang structured prompts.
 
 
 
@@ -41,12 +41,12 @@ See `docs/PROJECT_STRUCTURE.md` for detailed project organization.
 
 
 ## Features
-- 🔍 **Vector Search** - FAISS-based semantic similarity search with cosine distance
-- 🚀 **SGLang Integration** - Structured prompt templates for consistent responses  
-- 🌐 **Streamlit Dashboard** - Interactive web interface for document querying
-- ⚡ **Async Processing** - Concurrent document processing and query handling
-- 🧪 **Unit Tests** - Test coverage for vector store and LLM providers
-- 📊 **Performance Benchmarks** - Response time metrics and throughput analysis
+- Vector-based document search using FAISS with cosine similarity
+- SGLang structured prompts for consistent response generation
+- Streamlit web interface for document queries
+- Asynchronous document processing
+- Unit tests for core components
+- Performance benchmarking for response times
 
 
 

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
-Retrieval Latency Benchmark
-Measures vector search performance at different corpus sizes
+Script that measures vector search response time and throughput across different document corpus sizes
 """
 
 import sys
@@ -20,7 +19,7 @@ from rag_system import RAGSystem
 from rag_system.document_processor import DocumentProcessor
 
 def generate_test_corpus(size: int) -> list[str]:
-    """Generate synthetic documents for benchmarking"""
+    """Generates synthetic documents using predefined templates for consistent benchmarking"""
     
     # Base templates for different document types
     templates = [

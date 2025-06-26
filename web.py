@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
-Web Interface Entry Point
-Start the Streamlit web application
+Entry point that launches the Streamlit web interface for the RAG system
 """
 
 import sys
@@ -15,7 +14,7 @@ from config import config
 
 
 def main():
-    """Start the web interface"""
+    """Launches Streamlit application with the web interface components"""
     print(f"[*] Starting {config.app_name} Web Interface")
     print(f"[*] Version: {config.app_version}")
     print(f"[*] Host: {config.web_host}")
