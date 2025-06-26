@@ -5,6 +5,9 @@ site_url: https://ayaan0irfan.github.io/SG-Lang-Demo
 repo_name: Ayaan0Irfan/SG-Lang-Demo
 repo_url: https://github.com/Ayaan0Irfan/SG-Lang-Demo
 
+docs_dir: src
+site_dir: ../site
+
 theme:
   name: material
   palette:

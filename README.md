@@ -55,6 +55,21 @@ See `docs/PROJECT_STRUCTURE.md` for detailed project organization.
 - [Project Summary](docs/PROJECT_SUMMARY.md)
 - [Structure Comparison](docs/STRUCTURE_COMPARISON.md)
 - [Final Status](docs/FINAL_STATUS.md)
+- [Changelog](docs/CHANGELOG.md)
+
+### Full Documentation Site
+
+Build and serve the complete documentation:
+
+```bash
+python scripts/build_docs.py --serve
+```
+
+Or build static docs:
+
+```bash
+python scripts/build_docs.py
+```
 
 
 
