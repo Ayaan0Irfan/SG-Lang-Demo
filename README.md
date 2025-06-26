@@ -59,4 +59,7 @@ See `docs/PROJECT_STRUCTURE.md` for detailed project organization.
 
 
 ## License
-MIT License
+
+Apache License 2.0
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
