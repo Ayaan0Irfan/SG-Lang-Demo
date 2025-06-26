@@ -1,0 +1,269 @@
+Production System Troubleshooting Guide
+
+=== Common Issues and Solutions ===
+
+**High Latency (>2 seconds response time)**
+
+Symptoms:
+- User complaints about slow responses
+- Dashboard showing P95 latency > 2000ms
+- Timeout errors in application logs
+
+Diagnostic Steps:
+1. Check load balancer metrics for traffic spikes
+2. Monitor database connection pool utilization
+3. Examine AI model inference queue length
+4. Verify CDN cache hit rates for static assets
+
+Common Causes and Fixes:
+- Database connection exhaustion → Increase connection pool size or implement connection pooling
+- Cold start issues with serverless functions → Implement pre-warming or keep-alive mechanisms
+- Large model loading times → Cache models in memory or use model serving infrastructure
+- Network congestion → Review bandwidth allocation and consider edge computing
+
+Emergency Mitigation:
+- Enable circuit breakers to fail fast
+- Scale out application servers horizontally
+- Temporarily disable non-critical features
+- Activate read replicas for database queries
+
+**Memory Leaks**
+
+Symptoms:
+- Gradual increase in memory usage over time
+- Out of memory errors (OOM kills)
+- Application restarts due to memory pressure
+- Garbage collection pauses increasing
+
+Diagnostic Commands:
+```bash
+# Monitor memory usage
+kubectl top pods --sort-by=memory
+docker stats --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}"
+
+# Generate heap dump for Java applications
+jcmd <pid> GC.run_finalization
+jcmd <pid> VM.gc
+jmap -dump:format=b,file=heapdump.hprof <pid>
+
+# Python memory profiling
+python -m memory_profiler your_script.py
+py-spy record -o profile.svg -d 60 -p <pid>
+```
+
+Common Sources:
+- Unclosed database connections or file handles
+- Growing caches without eviction policies
+- Event listeners not properly cleaned up
+- Large objects retained in memory longer than needed
+
+Fixes:
+- Implement proper resource cleanup in try/finally blocks
+- Set cache size limits and TTL policies
+- Use weak references for event handlers
+- Regular restarts as temporary mitigation
+
+**Database Connection Issues**
+
+Symptoms:
+- "Connection refused" errors
+- "Too many connections" errors
+- Slow query performance
+- Connection timeouts
+
+Troubleshooting Steps:
+1. Check database server status and resource utilization
+2. Monitor active connections vs. maximum allowed
+3. Examine slow query logs
+4. Verify network connectivity between app and database
+
+Connection Pool Configuration:
+```python
+# Example for SQLAlchemy
+engine = create_engine(
+    DATABASE_URL,
+    pool_size=20,          # Number of persistent connections
+    max_overflow=30,       # Additional connections when pool exhausted  
+    pool_pre_ping=True,    # Validate connections before use
+    pool_recycle=3600,     # Recycle connections every hour
+    echo=False             # Set to True for SQL debugging
+)
+```
+
+**AI Model Inference Failures**
+
+Symptoms:
+- API returning 500 errors for model predictions
+- Model accuracy suddenly degraded
+- GPU out of memory errors
+- Model loading failures
+
+Common Issues:
+- Model file corruption or version mismatch
+- GPU memory fragmentation
+- Input data format changes
+- Dependency version conflicts
+
+Debugging Steps:
+```bash
+# Check GPU memory usage
+nvidia-smi
+gpustat -cp
+
+# Validate model files
+python -c "import torch; model = torch.load('model.pth'); print(model.keys())"
+
+# Test model inference with sample data
+curl -X POST https://api.example.com/predict \
+  -H "Content-Type: application/json" \
+  -d '{"text": "test input"}'
+```
+
+Solutions:
+- Implement model health checks and automatic reloading
+- Use model versioning and gradual rollouts
+- Monitor input data distribution for drift
+- Set up A/B testing for model comparisons
+
+=== Monitoring and Alerting ===
+
+**Key Metrics to Track**
+
+Application Performance:
+- Response time percentiles (P50, P95, P99)
+- Error rate (4xx and 5xx responses)
+- Throughput (requests per second)
+- Resource utilization (CPU, memory, disk)
+
+Business Metrics:
+- User engagement and retention
+- Conversion rates
+- Feature usage statistics
+- Customer satisfaction scores
+
+AI/ML Specific:
+- Model inference latency
+- Prediction accuracy over time
+- Data drift detection
+- Model confidence scores
+
+**Alert Configuration**
+
+Critical Alerts (PagerDuty):
+- Error rate > 5% for 2 minutes
+- P95 latency > 5 seconds for 3 minutes
+- Database connections > 90% for 1 minute
+- Service health check failures
+
+Warning Alerts (Slack):
+- P95 latency > 2 seconds for 5 minutes
+- Memory usage > 80% for 10 minutes
+- Disk space > 85% on any server
+- Unusual traffic patterns detected
+
+**Runbook Examples**
+
+Database Outage Response:
+1. Verify outage scope (primary vs. replica)
+2. Check recent deployments or configuration changes
+3. Attempt connection to backup database
+4. Communicate status to stakeholders
+5. Implement read-only mode if possible
+6. Document incident timeline and root cause
+
+Service Degradation:
+1. Check recent deployments and roll back if necessary
+2. Scale out application instances
+3. Review error logs for common patterns
+4. Contact on-call engineer if issue persists
+5. Prepare customer communication
+6. Schedule post-incident review
+
+=== Performance Optimization ===
+
+**Database Optimization**
+
+Query Performance:
+- Add indexes for frequently queried columns
+- Use EXPLAIN ANALYZE to identify slow queries
+- Implement query result caching (Redis/Memcached)
+- Consider read replicas for analytics workloads
+
+Example Index Creation:
+```sql
+-- Composite index for common query patterns
+CREATE INDEX idx_user_created_status ON users(created_at, status) WHERE status = 'active';
+
+-- Partial index for specific conditions
+CREATE INDEX idx_orders_pending ON orders(created_at) WHERE status = 'pending';
+
+-- Expression index for computed values
+CREATE INDEX idx_email_domain ON users(substring(email from '@(.*)$'));
+```
+
+Connection Optimization:
+- Use connection pooling (PgBouncer for PostgreSQL)
+- Implement prepared statements
+- Batch operations when possible
+- Close connections promptly
+
+**Caching Strategies**
+
+Application-Level Caching:
+```python
+import redis
+from functools import wraps
+
+redis_client = redis.Redis(host='localhost', port=6379, db=0)
+
+def cache_result(timeout=300):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            cache_key = f"{func.__name__}:{hash(str(args) + str(kwargs))}"
+            cached = redis_client.get(cache_key)
+            if cached:
+                return json.loads(cached)
+            
+            result = func(*args, **kwargs)
+            redis_client.setex(cache_key, timeout, json.dumps(result))
+            return result
+        return wrapper
+    return decorator
+
+@cache_result(timeout=600)
+def expensive_computation(user_id, category):
+    # Expensive operation here
+    return result
+```
+
+CDN Configuration:
+- Cache static assets (images, CSS, JS) for 1 year
+- Cache API responses with appropriate TTL
+- Use cache headers (ETag, Last-Modified)
+- Implement cache invalidation strategies
+
+**AI/ML Performance**
+
+Model Serving Optimization:
+- Use model quantization to reduce memory usage
+- Implement batch inference for throughput
+- Cache model predictions for repeated inputs
+- Use faster inference engines (ONNX, TensorRT)
+
+Example Batch Processing:
+```python
+async def batch_predict(texts, batch_size=32):
+    results = []
+    for i in range(0, len(texts), batch_size):
+        batch = texts[i:i+batch_size]
+        batch_results = await model.predict(batch)
+        results.extend(batch_results)
+    return results
+```
+
+Resource Management:
+- Set appropriate GPU memory limits
+- Use mixed precision training/inference
+- Implement model warm-up procedures
+- Monitor and optimize CPU/GPU utilization

@@ -1,0 +1,123 @@
+TechCorp Employee Handbook
+
+=== Company Overview ===
+
+TechCorp is a leading AI research company founded in 2019, specializing in natural language processing and machine learning infrastructure. Our mission is to democratize access to advanced AI technologies while maintaining the highest standards of safety and ethics.
+
+Headquarters: San Francisco, CA
+Employees: 450+ worldwide
+Core Values: Innovation, Transparency, Collaboration, Safety
+
+=== HR Policies ===
+
+Work Schedule:
+- Flexible hours with core collaboration time 10 AM - 3 PM PST
+- Remote work allowed up to 3 days per week
+- Unlimited PTO policy with minimum 3 weeks recommended per year
+- 12 company holidays plus floating holidays for cultural observances
+
+Compensation and Benefits:
+- Competitive salary benchmarked to 90th percentile of market rates
+- Annual equity grants with 4-year vesting schedule
+- Health insurance: 100% premium coverage for employee, 80% for family
+- $5,000 annual learning and development budget
+- Home office stipend: $2,000 initial setup + $500 annual refresh
+
+Performance Reviews:
+- Bi-annual review cycles (March and September)
+- 360-degree feedback including peer, manager, and direct report input
+- Career development planning with defined growth tracks
+- Promotion cycles aligned with review periods
+
+=== Engineering Guidelines ===
+
+Code Standards:
+- All code must pass automated testing with >90% coverage
+- Peer review required for all changes via pull requests
+- Documentation required for all public APIs and complex algorithms
+- Security review mandatory for any user-facing features
+
+AI/ML Development:
+- Use approved model providers: OpenAI, Anthropic, Groq for experiments
+- All training data must be properly licensed and documented
+- Bias testing required for all ML models before production deployment
+- Model performance monitoring with automated alerts for degradation
+
+Infrastructure:
+- Kubernetes-based deployment on AWS
+- GitOps workflow using ArgoCD
+- Monitoring via Datadog with PagerDuty for alerting
+- Secrets management through HashiCorp Vault
+
+=== IT and Security ===
+
+Device Policy:
+- MacBook Pro (M3) or ThinkPad X1 Carbon provided for all employees
+- BYOD allowed for personal devices with MDM enrollment
+- VPN required for all remote access to company resources
+- Multi-factor authentication mandatory for all accounts
+
+Data Security:
+- Customer data classified as Confidential - encryption required at rest and in transit
+- Personal information of EU residents subject to GDPR compliance
+- Data retention policy: 7 years for financial records, 3 years for operational data
+- Regular security training required for all employees (quarterly)
+
+Incident Response:
+- Security incidents must be reported within 1 hour to security@techcorp.com
+- IT support available 24/7 via Slack #it-support channel
+- Emergency contacts list maintained for critical system outages
+- Disaster recovery plan tested quarterly
+
+=== Office Locations and Facilities ===
+
+San Francisco HQ:
+- Address: 123 Market Street, Suite 2000, San Francisco, CA 94105
+- Access hours: 24/7 with badge access
+- Amenities: Full kitchen, game room, gym, rooftop terrace
+- Parking: Subsidized garage parking available ($100/month)
+
+Remote Offices:
+- New York: WeWork space at 1 World Trade Center
+- London: Dedicated office at 25 Old Broad Street
+- Austin: Shared space at Capital Factory
+
+=== Professional Development ===
+
+Learning Opportunities:
+- Internal tech talks every Friday at 4 PM PST
+- Conference attendance budget: $3,000 per year per employee
+- Internal mentorship program with cross-team pairing
+- Book club with company-sponsored technical books
+
+Certification Support:
+- AWS/GCP certification reimbursement up to $1,000 per year
+- Coursera/Udacity course subscriptions provided
+- Academic partnerships with Stanford and UC Berkeley for continuing education
+- Speaker bonus: $500 for presenting at external conferences
+
+Career Growth:
+- Individual contributor track: Junior → Senior → Staff → Principal → Distinguished
+- Management track: Team Lead → Engineering Manager → Director → VP
+- Lateral movement encouraged between teams (AI Research, Platform, Product)
+- Annual promotion rate target: 25% of eligible employees
+
+=== Communication and Culture ===
+
+Meeting Guidelines:
+- Default to async communication via Slack and Notion
+- Meetings require agenda shared 24 hours in advance
+- No-meeting Fridays for deep work
+- All-hands meetings monthly with Q&A sessions
+
+Remote Work Best Practices:
+- Daily standup at 9 AM local time for each team
+- Overlap hours: 10 AM - 3 PM PST for cross-timezone collaboration
+- Video calls encouraged for complex discussions
+- Regular team-building activities both virtual and in-person
+
+Diversity and Inclusion:
+- Employee resource groups: Women in Tech, LGBTQ+ Alliance, BIPOC in AI
+- Unconscious bias training for all managers
+- Diverse hiring panel requirement for all senior roles
+- Annual D&I survey with public results and action plans

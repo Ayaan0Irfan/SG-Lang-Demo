@@ -1,0 +1,105 @@
+AI/ML Technical Guide
+
+=== Large Language Models (LLMs) ===
+
+Large Language Models are neural networks with billions of parameters trained on vast amounts of text data. Popular models include:
+
+- GPT-4: OpenAI's flagship model with 1.76 trillion parameters, excellent for reasoning and code generation
+- Llama 3.1: Meta's open-source model available in 8B, 70B, and 405B parameter variants
+- Claude 3.5 Sonnet: Anthropic's model known for safety and helpfulness
+- Gemini Pro: Google's multimodal model supporting text, images, and code
+
+LLMs work through transformer architecture, using attention mechanisms to understand context and generate coherent responses.
+
+=== Retrieval-Augmented Generation (RAG) ===
+
+RAG combines information retrieval with language generation to reduce hallucinations and provide up-to-date information. The RAG pipeline consists of:
+
+1. Document Ingestion: Converting documents into embeddings using models like sentence-transformers
+2. Vector Storage: Storing embeddings in vector databases (Faiss, Pinecone, Weaviate)
+3. Retrieval: Finding relevant documents using semantic similarity search
+4. Augmentation: Adding retrieved context to the user query
+5. Generation: Using LLM to generate response based on query + context
+
+Benefits of RAG:
+- Reduces hallucinations by grounding responses in factual data
+- Enables real-time information updates without model retraining
+- Allows fine-grained control over knowledge sources
+- Cost-effective compared to fine-tuning large models
+
+=== Vector Databases and Embeddings ===
+
+Vector databases store high-dimensional embeddings and enable fast similarity search:
+
+Faiss (Facebook AI Similarity Search):
+- Developed by Meta for billion-scale vector search
+- Supports CPU and GPU acceleration
+- Multiple index types: IndexFlatIP, IndexHNSW, IndexIVF
+- Excellent for local development and research
+
+Pinecone:
+- Managed vector database service
+- Built-in filtering and metadata support
+- Auto-scaling and high availability
+- Best for production applications
+
+Weaviate:
+- Open-source vector database with GraphQL API
+- Built-in ML models and text processing
+- Hybrid search combining vector and keyword search
+- Good for complex data relationships
+
+Embedding Models:
+- sentence-transformers/all-MiniLM-L6-v2: Fast, lightweight, good general performance
+- text-embedding-ada-002: OpenAI's embedding model, high quality but requires API calls
+- BGE models: State-of-the-art open-source embeddings from Beijing Academy of AI
+
+=== SGLang (Structured Generation Language) ===
+
+SGLang is a programming language designed for complex LLM workflows:
+
+Key Features:
+- Structured prompting with branching logic
+- Parallel execution of multiple LLM calls
+- Built-in retry mechanisms and error handling
+- Integration with popular LLM providers (OpenAI, Anthropic, local models)
+
+Example SGLang program:
+```
+@function
+def analyze_document(document):
+    summary = llm("Summarize this document:", document)
+    keywords = llm("Extract 5 key terms:", document)
+    sentiment = llm("What is the sentiment?", document)
+    return {"summary": summary, "keywords": keywords, "sentiment": sentiment}
+```
+
+Benefits over naive prompting:
+- 3-5x faster execution through parallelization
+- Better error handling and retries
+- Structured outputs and type safety
+- Easier debugging and testing
+
+=== Performance Optimization ===
+
+Best practices for production RAG systems:
+
+1. Chunk Size Optimization:
+   - Technical docs: 200-400 tokens
+   - Narrative text: 400-800 tokens
+   - Code: Function or class level chunks
+
+2. Retrieval Tuning:
+   - Use hybrid search (vector + keyword)
+   - Implement re-ranking for better relevance
+   - Optimize top-k retrieval (typically 3-10 documents)
+
+3. Caching Strategies:
+   - Cache embeddings to avoid recomputation
+   - Cache LLM responses for repeated queries
+   - Use async processing for better throughput
+
+4. Model Selection:
+   - Fast models (Groq, local inference) for development
+   - High-quality models (GPT-4, Claude) for production
+   - Consider cost vs. quality tradeoffs

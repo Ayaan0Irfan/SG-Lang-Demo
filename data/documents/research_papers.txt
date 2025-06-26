@@ -1,0 +1,152 @@
+AI Research Paper Summaries
+
+=== "Attention Is All You Need" (Vaswani et al., 2017) ===
+
+This foundational paper introduced the Transformer architecture that revolutionized natural language processing.
+
+Key Contributions:
+- Eliminated recurrent connections entirely, relying solely on attention mechanisms
+- Introduced multi-head attention allowing models to focus on different aspects simultaneously
+- Achieved state-of-the-art results on translation tasks with significant speedup over RNNs
+- Enabled parallelization during training, making large-scale model training feasible
+
+Technical Innovation:
+The self-attention mechanism computes attention weights as:
+Attention(Q,K,V) = softmax(QK^T/√d_k)V
+
+Where Q (queries), K (keys), and V (values) are linear projections of the input.
+
+Impact: This architecture became the foundation for GPT, BERT, T5, and virtually all modern LLMs.
+
+=== "BERT: Pre-training of Deep Bidirectional Transformers" (Devlin et al., 2018) ===
+
+BERT (Bidirectional Encoder Representations from Transformers) introduced bidirectional pre-training for language understanding.
+
+Key Innovations:
+- Bidirectional context: Unlike GPT's left-to-right approach, BERT sees full context
+- Masked Language Modeling: Randomly mask tokens and predict them using surrounding context
+- Next Sentence Prediction: Learn relationships between sentence pairs
+- Transfer learning: Pre-train on large corpus, fine-tune on specific tasks
+
+Results:
+- Achieved new state-of-the-art on 11 NLP tasks including GLUE benchmark
+- Showed that bidirectional training significantly outperforms left-to-right training
+- Demonstrated the power of transfer learning in NLP
+
+Impact: BERT established the pre-train/fine-tune paradigm and inspired numerous variants (RoBERTa, DeBERTa, etc.).
+
+=== "Language Models are Few-Shot Learners" (Brown et al., 2020) ===
+
+The GPT-3 paper demonstrated that large language models can perform tasks with minimal examples.
+
+Scale and Architecture:
+- 175 billion parameters (1000x larger than GPT-1)
+- 96 attention layers with 96 attention heads each
+- Trained on 300 billion tokens from diverse internet sources
+- Context window of 2048 tokens
+
+Key Findings:
+- In-context learning: Models can learn tasks from just a few examples in the prompt
+- Scaling laws: Performance improves predictably with model size, data, and compute
+- Emergent abilities: Capabilities like arithmetic and code generation emerge at scale
+- Few-shot performance often competitive with fine-tuned smaller models
+
+Implications:
+- Shifted focus from task-specific models to general-purpose language models
+- Demonstrated the importance of scale in AI capabilities
+- Raised questions about the nature of learning and intelligence
+
+=== "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks" (Lewis et al., 2020) ===
+
+RAG paper introduced the concept of combining parametric and non-parametric knowledge.
+
+Architecture:
+- Retriever: Dense Passage Retrieval (DPR) using BERT-based encoders
+- Generator: BART-based sequence-to-sequence model
+- Training: End-to-end training of both components
+
+Key Benefits:
+- Access to up-to-date information without retraining
+- More factual and grounded responses
+- Interpretability through retrieved passages
+- Efficient scaling of knowledge without increasing parameters
+
+Results:
+- Outperformed T5 on open-domain QA tasks
+- Showed significant improvements on fact-checking and claim verification
+- Demonstrated the value of external knowledge sources
+
+Impact: RAG became the foundation for most production LLM applications dealing with factual information.
+
+=== "Training language models to follow instructions with human feedback" (Ouyang et al., 2022) ===
+
+The InstructGPT paper introduced Reinforcement Learning from Human Feedback (RLHF).
+
+Three-Stage Training Process:
+1. Supervised Fine-tuning: Train on high-quality instruction-following examples
+2. Reward Modeling: Train a model to predict human preferences between outputs
+3. Reinforcement Learning: Use PPO to optimize the policy against the reward model
+
+Key Results:
+- Models with 1.3B parameters outperformed 175B GPT-3 on instruction following
+- Significant reduction in harmful outputs and increased truthfulness
+- Better alignment with human intentions and values
+- Improved performance on coding and reasoning tasks
+
+Human Evaluation:
+- Labelers preferred InstructGPT outputs 85% of the time over GPT-3
+- Reduced toxicity and increased helpfulness across diverse prompts
+- More honest about knowledge limitations
+
+Impact: RLHF became standard practice for aligning LLMs, used in ChatGPT, Claude, and other assistant models.
+
+=== "LLaMA: Open and Efficient Foundation Language Models" (Touvron et al., 2023) ===
+
+Meta's LLaMA models demonstrated that smaller, efficiently trained models can match larger ones.
+
+Model Variants:
+- LLaMA-7B, 13B, 30B, 65B parameters
+- Trained on 1.4 trillion tokens (much more than typical for model size)
+- RMSNorm normalization and SwiGLU activation function
+- Rotary positional embeddings (RoPE)
+
+Key Insights:
+- Training longer on high-quality data more important than just scaling parameters
+- Careful data curation and filtering crucial for performance
+- Efficient architectures can achieve better performance per parameter
+- Open-source models can compete with proprietary ones
+
+Performance:
+- LLaMA-13B outperformed GPT-3 (175B) on most benchmarks
+- LLaMA-65B competitive with Chinchilla and PaLM
+- Excellent performance on reasoning, reading comprehension, and mathematical tasks
+
+Impact: Sparked the open-source LLM revolution, leading to countless fine-tuned variants and research advances.
+
+=== "GPT-4 Technical Report" (OpenAI, 2023) ===
+
+GPT-4 represents a significant advancement in multimodal AI capabilities.
+
+Key Improvements:
+- Multimodal input: Can process both text and images
+- Enhanced reasoning: Better performance on complex logical and mathematical problems
+- Improved safety: More resistant to adversarial prompts and jailbreaking attempts
+- Larger context: Support for much longer input sequences
+
+Benchmark Performance:
+- Achieved 90th percentile on Uniform Bar Exam
+- Scored 5 on several AP exams
+- Significant improvements on mathematical and scientific reasoning tasks
+- Better performance on non-English languages
+
+Safety and Alignment:
+- Extensive red teaming and adversarial testing
+- Reduced harmful outputs compared to GPT-3.5
+- Better refusal behavior for inappropriate requests
+- Improved factual accuracy and reduced hallucinations
+
+Limitations:
+- Still exhibits hallucinations and reasoning errors
+- Knowledge cutoff means missing recent information
+- Can be overconfident in incorrect responses
+- Potential for misuse in generating convincing misinformation

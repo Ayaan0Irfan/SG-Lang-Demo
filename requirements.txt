@@ -1,0 +1,23 @@
+# Core dependencies for RAG system
+python-dotenv>=1.0.0
+groq>=0.4.0
+openai>=1.0.0
+
+# Vector search and embeddings
+faiss-cpu>=1.7.4
+sentence-transformers>=2.2.0
+numpy>=1.24.0
+
+# Data processing
+pandas>=2.0.0
+tiktoken>=0.5.0
+
+# Together AI (fallback)
+together>=0.2.0
+
+# Development tools
+jupyter>=1.0.0
+tqdm>=4.65.0
+
+# Optional: SGLang (install separately if needed)
+# sglang>=0.2.0
