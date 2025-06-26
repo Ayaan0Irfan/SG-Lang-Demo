@@ -41,12 +41,12 @@ See `docs/PROJECT_STRUCTURE.md` for detailed project organization.
 
 
 ## Features
-- 🔍 **Advanced RAG Pipeline** - Semantic search with FAISS vector store
-- 🚀 **SGLang Integration** - Structured prompts and parallel processing
-- 🌐 **Web Interface** - Interactive Streamlit dashboard
-- ⚡ **Performance Optimized** - Async processing and caching
-- 🧪 **Comprehensive Testing** - Unit and integration tests
-- 📊 **Benchmarking Suite** - Performance analysis tools
+- 🔍 **Vector Search** - FAISS-based semantic similarity search with cosine distance
+- 🚀 **SGLang Integration** - Structured prompt templates for consistent responses  
+- 🌐 **Streamlit Dashboard** - Interactive web interface for document querying
+- ⚡ **Async Processing** - Concurrent document processing and query handling
+- 🧪 **Unit Tests** - Test coverage for vector store and LLM providers
+- 📊 **Performance Benchmarks** - Response time metrics and throughput analysis
 
 
 
