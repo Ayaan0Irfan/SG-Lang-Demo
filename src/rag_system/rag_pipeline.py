@@ -155,3 +155,7 @@ Please provide a comprehensive answer based on the context above. If the context
             stats = self.processor.get_document_stats(self.vector_store.chunks)
             print(f"   Total words: {stats['total_words']:,}")
             print(f"   Average chunk size: {stats['avg_chunk_size']:.1f} words")
+    
+    def query(self, query: str, provider: str = "groq") -> Dict:
+        """Alias for generate_answer for backward compatibility"""
+        return self.generate_answer(query, provider)

@@ -21,12 +21,11 @@ def main():
     print(f"[*] Port: {config.web_port}")
     print()
     
-    # Move streamlit app to web directory
+    # Use the web app
     web_app_path = Path("src/web/app.py")
     if not web_app_path.exists():
-        # Copy the existing streamlit app
-        import shutil
-        shutil.copy("streamlit_app.py", web_app_path)
+        print("[!] Web app not found. Please ensure src/web/app.py exists.")
+        return
     
     try:
         subprocess.run([
@@ -39,13 +38,7 @@ def main():
         print("\n[*] Web interface stopped by user")
     except FileNotFoundError:
         print("[!] Streamlit not found. Please install with: pip install streamlit")
-        print("[*] Falling back to legacy app...")
-        subprocess.run([
-            "streamlit", "run", "streamlit_app.py",
-            "--server.headless", "true",
-            "--server.address", config.web_host,
-            "--server.port", str(config.web_port)
-        ])
+        return
 
 
 if __name__ == "__main__":

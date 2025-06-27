@@ -20,8 +20,7 @@ def main():
     # Initialize system
     print("🔧 Initializing RAG system...")
     rag = RAGSystem()
-    rag.load_documents()
-    rag.build_index()
+    rag.build_index()  # This handles document loading and index building
     
     # Test queries
     test_queries = [
@@ -36,10 +35,12 @@ def main():
         print(f"\n--- Query {i}: {query} ---")
         
         start_time = time.time()
-        response = rag.query(query)
+        response = rag.generate_answer(query)
         elapsed = time.time() - start_time
         
-        print(f"📝 Response ({elapsed:.2f}s): {response[:200]}...")
+        print(f"📝 Response ({elapsed:.2f}s): {response.get('answer', 'No answer')[:200]}...")
+        if response.get('sources'):
+            print(f"📚 Sources: {len(response['sources'])} documents found")
         
     print("\n✅ Demo completed successfully!")
 
