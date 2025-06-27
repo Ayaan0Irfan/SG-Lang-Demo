@@ -6,7 +6,7 @@ Template-based prompt engineering for consistent LLM outputs
 
 class StructuredPrompts:
     """SGLang-style structured prompts"""
-    
+
     @staticmethod
     def document_analysis_prompt(chunk: str, query: str) -> str:
         """Structured prompt for document analysis"""
@@ -45,12 +45,12 @@ ANSWER:"""
         """Generate prompt for specific perspective analysis"""
         perspective_instructions = {
             "technical": "Focus on technical implementation, architecture, and specifications.",
-            "business": "Focus on business impact, costs, benefits, and strategic considerations.", 
-            "user": "Focus on user experience, usability, and practical applications."
+            "business": "Focus on business impact, costs, benefits, and strategic considerations.",
+            "user": "Focus on user experience, usability, and practical applications.",
         }
-        
+
         instruction = perspective_instructions.get(perspective, "Provide a general analysis.")
-        
+
         return f"""PERSPECTIVE: {perspective.upper()} ANALYSIS
 
 INSTRUCTION: {instruction}
@@ -64,11 +64,10 @@ ANALYSIS FROM {perspective.upper()} PERSPECTIVE:"""
     @staticmethod
     def synthesis_prompt(query: str, perspectives: dict) -> str:
         """Synthesize multiple perspectives into comprehensive answer"""
-        perspective_text = "\n\n".join([
-            f"{name.upper()} PERSPECTIVE:\n{content}" 
-            for name, content in perspectives.items()
-        ])
-        
+        perspective_text = "\n\n".join(
+            [f"{name.upper()} PERSPECTIVE:\n{content}" for name, content in perspectives.items()]
+        )
+
         return f"""TASK: Synthesize multiple perspectives into a comprehensive answer
 
 QUERY: {query}

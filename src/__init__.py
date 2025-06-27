@@ -7,4 +7,4 @@ __version__ = "0.1.0"
 __author__ = "SGLang RAG Team"
 
 # Package imports for convenience
-from .config import config
+from .config import config as config

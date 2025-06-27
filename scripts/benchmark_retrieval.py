@@ -62,7 +62,7 @@ def generate_test_corpus(size: int) -> list[str]:
                 step2="network connectivity", 
                 step3="service status"
             )
-        elif "research" in template:
+        elif "Research" in template or "research" in template:
             doc = template.format(
                 technology=technologies[i % len(technologies)],
                 metric="accuracy",
@@ -118,11 +118,8 @@ def benchmark_retrieval_latency(corpus_sizes: list[int], num_queries: int = 10) 
             print("🔧 Building vector index...")
             start_build = time.time()
             
-            rag = RAGSystem()
-            # Override documents directory temporarily
-            rag.documents_dir = temp_dir
-            rag.load_documents()
-            rag.build_index()
+            rag = RAGSystem(docs_dir=temp_dir)
+            rag.build_index(force_rebuild=True)
             
             build_time = time.time() - start_build
             print(f"⚡ Index built in {build_time:.2f}s")

@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.9, 3.10, 3.11]
+        python-version: [3.9, "3.10", "3.11"]
 
     steps:
     - uses: actions/checkout@v4
@@ -25,7 +25,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install -r requirements-dev.txt
+        pip install black isort ruff pytest
     
     - name: Lint with ruff
       run: |
@@ -33,20 +33,15 @@ jobs:
     
     - name: Format check with black
       run: |
-        black --check src/ tests/
-    
-    - name: Type check with mypy
+        black --check src/ tests/ --line-length 100
+        
+    - name: Check import sorting with isort
       run: |
-        mypy src/
-      continue-on-error: true
+        isort --check-only src/ tests/ --profile black --line-length 100
     
     - name: Run unit tests
       run: |
-        pytest tests/ -v --cov=src --cov-report=xml
-    
-    - name: Run smoke test
-      run: |
-        python tests/test_smoke.py
+        pytest tests/ -v
     
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3

@@ -32,7 +32,7 @@ jupyter>=1.0.0
 notebook>=6.5.0
 
 # Debugging and profiling
-pdb++>=0.10.0
+pdbpp>=0.10.0
 memory-profiler>=0.61.0
 line-profiler>=4.0.0
 
