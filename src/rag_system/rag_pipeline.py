@@ -61,51 +61,87 @@ class RAGSystem:
 
     def generate_answer(self, query: str, provider: str = "groq") -> Dict:
         """Generate answer using RAG pipeline"""
-        print(f"[?] Query: {query}")
+        try:
+            # Validate input
+            if not query or not query.strip():
+                return {
+                    "answer": "Please provide a valid question.",
+                    "sources": [],
+                    "query": query,
+                    "error": "Empty or invalid query"
+                }
 
-        # Step 1: Retrieve relevant documents
-        print("[*] Retrieving relevant documents...")
-        relevant_docs = self.search(query, top_k=3)
+            print(f"[?] Query: {query}")
 
-        if not relevant_docs:
+            # Step 1: Retrieve relevant documents
+            print("[*] Retrieving relevant documents...")
+            try:
+                relevant_docs = self.search(query, top_k=3)
+            except Exception as e:
+                print(f"[!] Error during document search: {e}")
+                return {
+                    "answer": "Sorry, there was an error searching the documents.",
+                    "sources": [],
+                    "query": query,
+                    "error": f"Search error: {str(e)}"
+                }
+
+            if not relevant_docs:
+                return {
+                    "answer": "I don't have enough information to answer that question.",
+                    "sources": [],
+                    "query": query,
+                }
+
+            # Step 2: Prepare context
+            context_parts = []
+            sources = []
+
+            for i, (chunk, score) in enumerate(relevant_docs, 1):
+                context_parts.append(f"Source {i} ({chunk.source_file}):\n{chunk.text}")
+                sources.append(
+                    {
+                        "file": chunk.source_file,
+                        "chunk_id": chunk.id,
+                        "score": score,
+                        "preview": chunk.text[:100] + "..." if len(chunk.text) > 100 else chunk.text,
+                    }
+                )
+                print(f"   [*] {chunk.source_file} (score: {score:.3f})")
+
+            context = "\n\n".join(context_parts)
+
+            # Step 3: Generate response using SGLang structured prompts
+            print(f"[*] Generating response using {provider}...")
+
+            try:
+                # Use SGLang structured prompt for better consistency
+                prompt = self.structured_prompts.structured_rag_prompt(query, context)
+                answer = self.llm.generate_response(prompt, provider)
+            except Exception as e:
+                print(f"[!] Error generating response: {e}")
+                return {
+                    "answer": "Sorry, there was an error generating the response. Please try again.",
+                    "sources": sources,
+                    "query": query,
+                    "error": f"LLM error: {str(e)}"
+                }
+
             return {
-                "answer": "I don't have enough information to answer that question.",
-                "sources": [],
+                "answer": answer,
+                "sources": sources,
                 "query": query,
+                "context_used": len(relevant_docs),
             }
 
-        # Step 2: Prepare context
-        context_parts = []
-        sources = []
-
-        for i, (chunk, score) in enumerate(relevant_docs, 1):
-            context_parts.append(f"Source {i} ({chunk.source_file}):\n{chunk.text}")
-            sources.append(
-                {
-                    "file": chunk.source_file,
-                    "chunk_id": chunk.id,
-                    "score": score,
-                    "preview": chunk.text[:100] + "..." if len(chunk.text) > 100 else chunk.text,
-                }
-            )
-            print(f"   [*] {chunk.source_file} (score: {score:.3f})")
-
-        context = "\n\n".join(context_parts)
-
-        # Step 3: Generate response using SGLang structured prompts
-        print(f"[*] Generating response using {provider}...")
-
-        # Use SGLang structured prompt for better consistency
-        prompt = self.structured_prompts.structured_rag_prompt(query, context)
-
-        answer = self.llm.generate_response(prompt, provider)
-
-        return {
-            "answer": answer,
-            "sources": sources,
-            "query": query,
-            "context_used": len(relevant_docs),
-        }
+        except Exception as e:
+            print(f"[!] Unexpected error in generate_answer: {e}")
+            return {
+                "answer": "An unexpected error occurred. Please try again.",
+                "sources": [],
+                "query": query,
+                "error": f"Unexpected error: {str(e)}"
+            }
 
     def generate_multi_perspective_answer(self, query: str, provider: str = "groq") -> Dict:
         """Generate answer from multiple perspectives using SGLang structured prompts"""

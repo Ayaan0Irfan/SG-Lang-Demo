@@ -58,19 +58,25 @@ class VectorStore:
         if not self.is_built:
             raise ValueError("Vector store not built. Add documents first.")
 
-        # Generate query embedding
-        query_embedding = self.embedding_model.encode([query], normalize_embeddings=True)
+        if not query or not query.strip():
+            raise ValueError("Query cannot be empty")
 
-        # Search in FAISS index
-        scores, indices = self.index.search(query_embedding.astype("float32"), top_k)
+        try:
+            # Generate query embedding
+            query_embedding = self.embedding_model.encode([query], normalize_embeddings=True)
 
-        # Return chunks with scores
-        results = []
-        for score, idx in zip(scores[0], indices[0]):
-            if idx != -1:  # Valid result
-                results.append((self.chunks[idx], float(score)))
+            # Search in FAISS index
+            scores, indices = self.index.search(query_embedding.astype("float32"), top_k)
 
-        return results
+            # Return chunks with scores
+            results = []
+            for score, idx in zip(scores[0], indices[0]):
+                if idx != -1 and idx < len(self.chunks):  # Valid result
+                    results.append((self.chunks[idx], float(score)))
+
+            return results
+        except Exception as e:
+            raise RuntimeError(f"Error during vector search: {str(e)}")
 
     def similarity_search(self, query: str, k: int = 5) -> List[DocumentChunk]:
         """Search for similar documents (alias for search method that returns just chunks)"""

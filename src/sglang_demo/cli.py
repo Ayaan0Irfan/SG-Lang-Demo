@@ -59,53 +59,89 @@ Examples:
 
     args = parser.parse_args()
 
-    # Initialize RAG system
-    print(f"[*] Initializing {config.app_name} v{config.app_version}")
+    try:
+        # Initialize RAG system
+        print(f"[*] Initializing {config.app_name} v{config.app_version}")
 
-    rag = RAGSystem(
-        docs_dir=args.docs_dir, vector_store_path=f"{config.vector_index_dir}/knowledge_base"
-    )
+        rag = RAGSystem(
+            docs_dir=args.docs_dir, vector_store_path=f"{config.vector_index_dir}/knowledge_base"
+        )
 
-    # Build index
-    rag.build_index(force_rebuild=args.build_index)
+        # Build index
+        try:
+            rag.build_index(force_rebuild=args.build_index)
+        except Exception as e:
+            print(f"[!] Error building index: {e}")
+            print("[!] Please check your documents directory and try again.")
+            return 1
 
-    if args.stats:
-        print("\n[i] System Statistics:")
-        rag._show_stats()
-        return
+        if args.stats:
+            try:
+                print("\n[i] System Statistics:")
+                rag._show_stats()
+                return 0
+            except Exception as e:
+                print(f"[!] Error showing statistics: {e}")
+                return 1
 
-    if args.query:
-        print(f"\n[?] Processing query: {args.query}")
-        
-        if args.multi_perspective:
-            print("[*] Using SGLang multi-perspective analysis...")
-            result = rag.generate_multi_perspective_answer(args.query, provider=args.provider)
+        if args.query:
+            if not args.query.strip():
+                print("[!] Please provide a non-empty query.")
+                return 1
+                
+            print(f"\n[?] Processing query: {args.query}")
             
-            print("\n[+] Synthesized Answer:")
-            print(result["answer"])
-            
-            if args.verbose:
-                print("\n[+] Individual Perspectives:")
-                for perspective, analysis in result["perspectives"].items():
-                    print(f"\n--- {perspective.upper()} PERSPECTIVE ---")
-                    print(analysis)
+            try:
+                if args.multi_perspective:
+                    print("[*] Using SGLang multi-perspective analysis...")
+                    result = rag.generate_multi_perspective_answer(args.query, provider=args.provider)
                     
-                print(f"\n[i] Sources ({len(result['sources'])}):")
-                for i, source in enumerate(result["sources"], 1):
-                    print(f"   {i}. {source['file']} (score: {source['score']:.3f})")
+                    if "error" in result:
+                        print(f"[!] Error: {result['error']}")
+                        return 1
+                    
+                    print("\n[+] Synthesized Answer:")
+                    print(result["answer"])
+                    
+                    if args.verbose and "perspectives" in result:
+                        print("\n[+] Individual Perspectives:")
+                        for perspective, analysis in result["perspectives"].items():
+                            print(f"\n--- {perspective.upper()} PERSPECTIVE ---")
+                            print(analysis)
+                            
+                        print(f"\n[i] Sources ({len(result['sources'])}):")
+                        for i, source in enumerate(result["sources"], 1):
+                            print(f"   {i}. {source['file']} (score: {source['score']:.3f})")
+                else:
+                    result = rag.generate_answer(args.query, provider=args.provider)
+
+                    if "error" in result:
+                        print(f"[!] Error: {result['error']}")
+                        return 1
+
+                    print("\n[+] Answer:")
+                    print(result["answer"])
+
+                    if args.verbose:
+                        print(f"\n[i] Sources ({len(result['sources'])}):")
+                        for i, source in enumerate(result["sources"], 1):
+                            print(f"   {i}. {source['file']} (score: {source['score']:.3f})")
+            except Exception as e:
+                print(f"[!] Error processing query: {e}")
+                return 1
         else:
-            result = rag.generate_answer(args.query, provider=args.provider)
+            # Interactive mode
+            try:
+                rag.interactive_demo()
+            except Exception as e:
+                print(f"[!] Error in interactive mode: {e}")
+                return 1
 
-            print("\n[+] Answer:")
-            print(result["answer"])
+    except Exception as e:
+        print(f"[!] Fatal error: {e}")
+        return 1
 
-            if args.verbose:
-                print(f"\n[i] Sources ({len(result['sources'])}):")
-                for i, source in enumerate(result["sources"], 1):
-                    print(f"   {i}. {source['file']} (score: {source['score']:.3f})")
-    else:
-        # Interactive mode
-        rag.interactive_demo()
+    return 0
 
 
 def web_main():

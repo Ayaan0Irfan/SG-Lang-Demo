@@ -19,30 +19,48 @@ class DocumentProcessor:
 
     def load_documents(self, docs_dir: str) -> List[DocumentChunk]:
         """Load and chunk all documents from directory"""
-        docs_path = Path(docs_dir)
-        all_chunks = []
+        try:
+            docs_path = Path(docs_dir)
+            all_chunks = []
 
-        print(f"[*] Loading documents from {docs_dir}")
+            print(f"[*] Loading documents from {docs_dir}")
 
-        txt_files = list(docs_path.glob("*.txt"))
-        if not txt_files:
-            print(f"[!] No .txt documents found in {docs_dir}. Please add documents and try again.")
+            if not docs_path.exists():
+                print(f"[!] Documents directory {docs_dir} does not exist.")
+                return []
+
+            txt_files = list(docs_path.glob("*.txt"))
+            if not txt_files:
+                print(f"[!] No .txt documents found in {docs_dir}. Please add documents and try again.")
+                return []
+
+            for file_path in txt_files:
+                try:
+                    print(f"[*] Processing {file_path.name}...")
+
+                    with open(file_path, encoding="utf-8") as f:
+                        content = f.read()
+
+                    if not content.strip():
+                        print(f"   [!] Warning: {file_path.name} is empty, skipping...")
+                        continue
+
+                    # Split into chunks
+                    chunks = self._chunk_text(content, file_path.name)
+                    all_chunks.extend(chunks)
+
+                    print(f"   [+] Created {len(chunks)} chunks from {file_path.name}")
+
+                except Exception as e:
+                    print(f"   [!] Error processing {file_path.name}: {e}")
+                    continue
+
+            print(f"[i] Total chunks created: {len(all_chunks)})")
+            return all_chunks
+
+        except Exception as e:
+            print(f"[!] Error loading documents: {e}")
             return []
-
-        for file_path in txt_files:
-            print(f"[*] Processing {file_path.name}...")
-
-            with open(file_path, encoding="utf-8") as f:
-                content = f.read()
-
-            # Split into chunks
-            chunks = self._chunk_text(content, file_path.name)
-            all_chunks.extend(chunks)
-
-            print(f"   [+] Created {len(chunks)} chunks from {file_path.name}")
-
-        print(f"[i] Total chunks created: {len(all_chunks)})")
-        return all_chunks
 
     def _chunk_text(self, text: str, source_file: str) -> List[DocumentChunk]:
         """Split text into overlapping chunks"""
