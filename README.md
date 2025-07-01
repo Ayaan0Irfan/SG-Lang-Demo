@@ -74,6 +74,38 @@ sglang-web
 python scripts/quick_demo.py
 ```
 
+## Testing
+
+The project includes comprehensive testing to ensure reliability:
+
+### Run All Tests
+
+```bash
+# Run the full test suite
+python -m pytest tests/ -v
+
+# Run specific test categories
+python -m pytest tests/test_rag_system.py -v     # Unit tests
+python -m pytest tests/test_smoke.py -v          # Smoke tests
+python -m pytest tests/test_e2e.py -v           # End-to-end tests
+```
+
+### Test Coverage
+
+- **Unit Tests**: Core component functionality (vector store, document processing, LLM integration)
+- **Integration Tests**: Multi-component workflows and RAG pipeline
+- **Smoke Tests**: Basic functionality and error handling
+- **End-to-End Tests**: Complete user workflows from document loading to query answering
+
+### Running Tests Without API Keys
+
+Most tests can run without API configuration. Only the end-to-end LLM generation tests require API keys:
+
+```bash
+# Run tests that don't require API keys
+python -m pytest tests/test_rag_system.py tests/test_smoke.py -v
+```
+
 ## Project Structure
 
 ```

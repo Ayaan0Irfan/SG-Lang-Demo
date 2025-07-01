@@ -5,6 +5,10 @@ End-to-end test that verifies the complete RAG pipeline from document loading th
 
 import sys
 from pathlib import Path
+import pytest
+
+# Test markers for organization
+pytestmark = [pytest.mark.integration, pytest.mark.requires_api]
 
 # Add src to path
 sys.path.append(str(Path(__file__).parent.parent / "src"))
