@@ -72,6 +72,11 @@ class VectorStore:
 
         return results
 
+    def similarity_search(self, query: str, k: int = 5) -> List[DocumentChunk]:
+        """Search for similar documents (alias for search method that returns just chunks)"""
+        results = self.search(query, top_k=k)
+        return [chunk for chunk, score in results]
+
     def save(self, filepath: str):
         """Save vector store to disk"""
         save_dir = Path(filepath).parent
