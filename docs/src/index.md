@@ -1,32 +1,36 @@
-# SGLang RAG System
+# SGLang RAG Demo
 
-A professional-grade Retrieval-Augmented Generation (RAG) system with SGLang integration.
+A document retrieval and question answering system built with SGLang structured prompts.
 
 ## Overview
 
-This system combines semantic search capabilities with large language models to provide accurate, context-aware responses based on your document corpus.
+This system uses semantic search with language models to answer questions based on your documents.
 
 ## Key Features
 
-- **Vector Search**: FAISS-based semantic similarity search with cosine distance
-- **SGLang Integration**: Structured prompt templates for consistent responses  
-- **Streamlit Dashboard**: Interactive web interface for document querying
-- **Async Processing**: Concurrent document processing and query handling
-- **Unit Tests**: Test coverage for vector store and LLM providers
-- **Performance Benchmarks**: Response time metrics and throughput analysis
+- Vector search using FAISS for document similarity
+- SGLang structured prompt templates
+- Web interface for document querying
+- Multi-perspective analysis capabilities
+- Command-line interface
+- Performance benchmarking tools
 
 ## Quick Start
 
 ### Installation
 
 ```bash
-pip install -r requirements.txt
+pip install -e .
 ```
 
-### CLI Usage
+### Usage
 
 ```bash
-python main.py "What is the vacation policy?"
+# CLI
+sglang-rag --query "What is the vacation policy?"
+
+# Web interface  
+sglang-web
 ```
 
 ### Web Interface

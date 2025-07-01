@@ -1,9 +1,9 @@
-site_name: SGLang RAG System
-site_description: Professional RAG implementation with SGLang integration
-site_url: https://ayaan0irfan.github.io/SG-Lang-Demo
+site_name: SGLang RAG Demo
+site_description: RAG implementation with SGLang structured prompts
+site_url: https://example.com/sglang-rag-demo
 
-repo_name: Ayaan0Irfan/SG-Lang-Demo
-repo_url: https://github.com/Ayaan0Irfan/SG-Lang-Demo
+repo_name: your-username/sglang-rag-demo
+repo_url: https://github.com/your-username/sglang-rag-demo
 
 docs_dir: src
 site_dir: ../site
