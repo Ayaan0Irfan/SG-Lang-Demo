@@ -122,3 +122,14 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+def run_app():
+    """Entry point for console script"""
+    import subprocess
+    import sys
+    
+    # Run streamlit app
+    subprocess.run([
+        sys.executable, "-m", "streamlit", "run", 
+        __file__, "--server.port", "8501"
+    ])
