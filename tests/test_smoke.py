@@ -120,10 +120,10 @@ def test_document_ingestion(rag_system: RAGSystem) -> bool:
         return False
 
     print(f"✅ Built index with {len(rag_system.chunks)} chunks")
-    return True
+    assert len(rag_system.chunks) > 0, "No document chunks created"
 
 
-def test_query_processing(rag_system: RAGSystem) -> bool:
+def test_query_processing(rag_system: RAGSystem):
     """Test that queries return relevant responses"""
 
     print("🧪 Testing query processing...")
@@ -164,9 +164,7 @@ def test_query_processing(rag_system: RAGSystem) -> bool:
 
         except Exception as e:
             print(f"❌ FAIL: Exception during query: {e}")
-            return False
-
-    return True
+            assert False, f"Exception during query: {e}"
 
 
 def test_vector_similarity_search(rag_system: RAGSystem) -> bool:
@@ -175,9 +173,9 @@ def test_vector_similarity_search(rag_system: RAGSystem) -> bool:
     print("🔍 Testing vector similarity search...")
 
     test_queries = [
-        ("Paris France capital", "geography"),
-        ("vacation policy days", "policies"),
-        ("API authentication bearer", "technical"),
+        ("machine learning best practices", "ai_ml"),
+        ("vacation policy days", "company_handbook"),
+        ("API authentication bearer", "api_documentation"),
     ]
 
     for query, expected_source in test_queries:
@@ -187,25 +185,23 @@ def test_vector_similarity_search(rag_system: RAGSystem) -> bool:
 
             if not similar_chunks:
                 print(f"❌ FAIL: No similar chunks found for: {query}")
-                return False
-
+                assert False, f"No similar chunks found for: {query}"
+                
             # Check if at least one chunk is from expected source
             found_expected = any(
-                expected_source in chunk.source.lower() for chunk in similar_chunks
+                expected_source in chunk.source_file.lower() for chunk in similar_chunks
             )
 
             if not found_expected:
                 print(f"❌ FAIL: No chunks from expected source '{expected_source}'")
-                print(f"   Found sources: {[chunk.source for chunk in similar_chunks]}")
-                return False
+                print(f"   Found sources: {[chunk.source_file for chunk in similar_chunks]}")
+                assert False, f"No chunks from expected source '{expected_source}'"
 
             print(f"✅ PASS: Found relevant chunks for '{query}'")
 
         except Exception as e:
             print(f"❌ FAIL: Exception during similarity search: {e}")
-            return False
-
-    return True
+            assert False, f"Exception during similarity search: {e}"
 
 
 def run_smoke_test() -> bool:
