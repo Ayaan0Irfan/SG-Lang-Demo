@@ -14,8 +14,8 @@ sys.path.insert(0, str(src_path))
 from .document_processor import DocumentProcessor
 from .llm_providers import LLMProvider
 from .vector_store import DocumentChunk, VectorStore
-from sglang.structured_prompts import StructuredPrompts
-from sglang.parallel_processing import ParallelProcessor
+from sglang_helpers.structured_prompts import StructuredPrompts
+from sglang_helpers.parallel_processing import ParallelProcessor
 
 
 class RAGSystem:
@@ -272,31 +272,41 @@ class RAGSystem:
 
                 print(f"\n[i] Sources used ({len(result['sources'])} documents):")
                 for i, source in enumerate(result["sources"], 1):
-                    print(f"   {i}. {source['file']} (relevance: {source['score']:.3f})")
+                    print(f"   {i}. {source['file']} (relevance: {source['score']:.3f}")
                     print(f"      Preview: {source['preview']}")
-
-            except KeyboardInterrupt:
-                print("\n[*] Goodbye!")
-                break
             except Exception as e:
                 print(f"[!] Error: {e}")
 
-    def _show_stats(self):
-        """Show system statistics"""
-        print("\n[i] RAG System Statistics:")
-        print(
-            f"   Documents in index: {len(set(chunk.source_file for chunk in self.vector_store.chunks))}"
-        )
-        print(f"   Total chunks: {len(self.vector_store.chunks)}")
-        print(f"   Vector dimensions: {self.vector_store.dimension}")
-        print(f"   LLM providers: {', '.join(self.llm.list_available_providers())}")
+    # --------- Test-facing helpers for CI and notebooks ---------
+    def load_documents(self, path: str | Path | None = None, *, force: bool = False):
+        """
+        Thin wrapper so tests can call `rag.load_documents()`.
+        """
+        if force or not getattr(self, "_docs_loaded", False):
+            docs_path = Path(path or self.docs_dir)
+            self._raw_documents = list(docs_path.glob("*.txt"))
+            # Actually load and chunk docs using the real loader
+            self.chunks = self.processor.load_documents(str(docs_path))
+            self._docs_loaded = True
+        return self._raw_documents
 
-        # Document stats
-        if self.vector_store.chunks:
-            stats = self.processor.get_document_stats(self.vector_store.chunks)
-            print(f"   Total words: {stats['total_words']:,}")
-            print(f"   Average chunk size: {stats['avg_chunk_size']:.1f} words")
+    @property
+    def raw_documents(self):
+        if not getattr(self, "_docs_loaded", False):
+            raise RuntimeError("Call load_documents() first.")
+        return self._raw_documents
 
-    def query(self, query: str, provider: str = "groq") -> Dict:
-        """Alias for generate_answer for backward compatibility"""
-        return self.generate_answer(query, provider)
+    @property
+    def chunks(self):
+        if not hasattr(self, "_chunks"):
+            raise RuntimeError("Run build_index() first.")
+        return self._chunks
+
+    @chunks.setter
+    def chunks(self, value):
+        self._chunks = value
+
+    def query(self, prompt: str, **kwargs):
+        # For test compatibility: returns just the answer string
+        result = self.generate_answer(prompt, **kwargs)
+        return result["answer"] if isinstance(result, dict) and "answer" in result else result

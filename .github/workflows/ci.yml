@@ -43,6 +43,9 @@ jobs:
       run: |
         pytest tests/ -v
     
+    - name: Run smoke tests
+      run: pytest tests/test_smoke_pytest.py -v
+
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       with:

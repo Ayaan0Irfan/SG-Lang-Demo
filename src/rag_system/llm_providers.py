@@ -38,37 +38,34 @@ class LLMProvider:
             print("[+] Together AI client initialized")
 
     def generate_response(self, prompt: str, provider: str = "groq", max_tokens: int = 500) -> str:
-        """Generate response using specified provider"""
-        try:
-            if provider == "groq" and self.groq_client:
-                response = self.groq_client.chat.completions.create(
-                    messages=[{"role": "user", "content": prompt}],
-                    model="llama3-8b-8192",
-                    max_tokens=max_tokens,
-                    temperature=0.3,
-                )
-                return response.choices[0].message.content
-
-            elif provider == "together" and self.together_client:
-                response = self.together_client.chat.completions.create(
-                    model="meta-llama/Llama-3-8b-chat-hf",
-                    messages=[{"role": "user", "content": prompt}],
-                    max_tokens=max_tokens,
-                    temperature=0.3,
-                )
-                return response.choices[0].message.content
-
-            else:
-                return f"[!] Provider '{provider}' not available or not configured"
-
-        except Exception as e:
-            print(f"[!] Error with {provider}: {e}")
-            # Try fallback provider
-            fallback = "together" if provider == "groq" else "groq"
-            if fallback != provider:
-                print(f"[*] Trying fallback provider: {fallback}")
-                return self.generate_response(prompt, fallback, max_tokens)
-            return f"[!] All providers failed: {e}"
+        """Generate response using specified provider, with single fallback (no recursion)"""
+        tried = set()
+        providers_to_try = [provider, "together" if provider == "groq" else "groq"]
+        for prov in providers_to_try:
+            if prov in tried:
+                continue
+            tried.add(prov)
+            try:
+                if prov == "groq" and self.groq_client:
+                    response = self.groq_client.chat.completions.create(
+                        messages=[{"role": "user", "content": prompt}],
+                        model="llama3-8b-8192",
+                        max_tokens=max_tokens,
+                        temperature=0.3,
+                    )
+                    return response.choices[0].message.content
+                elif prov == "together" and self.together_client:
+                    response = self.together_client.chat.completions.create(
+                        model="meta-llama/Llama-3-8b-chat-hf",
+                        messages=[{"role": "user", "content": prompt}],
+                        max_tokens=max_tokens,
+                        temperature=0.3,
+                    )
+                    return response.choices[0].message.content
+            except Exception as e:
+                print(f"[!] Error with {prov}: {e}")
+                continue
+        return f"[!] All providers failed or are not configured."
 
     def is_available(self, provider: str) -> bool:
         """Check if a provider is available"""

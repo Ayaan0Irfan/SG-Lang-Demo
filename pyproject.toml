@@ -188,3 +188,6 @@ ignore = [
 "src/sglang_demo/*" = ["T201"]  # Allow print statements in CLI interface
 "src/rag_system/*" = ["T201"]  # Allow print statements in RAG system for logging
 "src/sglang/*" = ["T201"]  # Allow print statements in sglang modules
+
+[tool.setuptools]
+py_modules = ["config"]

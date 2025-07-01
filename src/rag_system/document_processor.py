@@ -24,7 +24,12 @@ class DocumentProcessor:
 
         print(f"[*] Loading documents from {docs_dir}")
 
-        for file_path in docs_path.glob("*.txt"):
+        txt_files = list(docs_path.glob("*.txt"))
+        if not txt_files:
+            print(f"[!] No .txt documents found in {docs_dir}. Please add documents and try again.")
+            return []
+
+        for file_path in txt_files:
             print(f"[*] Processing {file_path.name}...")
 
             with open(file_path, encoding="utf-8") as f:
@@ -36,7 +41,7 @@ class DocumentProcessor:
 
             print(f"   [+] Created {len(chunks)} chunks from {file_path.name}")
 
-        print(f"[i] Total chunks created: {len(all_chunks)}")
+        print(f"[i] Total chunks created: {len(all_chunks)})")
         return all_chunks
 
     def _chunk_text(self, text: str, source_file: str) -> List[DocumentChunk]:

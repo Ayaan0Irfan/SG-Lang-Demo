@@ -7,6 +7,7 @@ import shutil
 import sys
 import tempfile
 from pathlib import Path
+import pytest
 
 # Add src to path
 sys.path.append(str(Path(__file__).parent.parent / "src"))
@@ -70,6 +71,25 @@ API calls are limited to 1000 requests per hour per API key.
     )
 
     return temp_dir
+
+
+@pytest.fixture(scope="module")
+def rag_system():
+    """Fixture to provide a RAGSystem instance for tests"""
+    # Create test documents
+    print("🏗️  Setting up test environment...")
+    test_docs_dir = create_test_documents()
+
+    try:
+        rag = RAGSystem()
+        rag.documents_dir = test_docs_dir  # Override documents directory
+        rag.load_documents()
+        rag.build_index()
+        yield rag
+    finally:
+        # Cleanup test documents
+        print("\n🧹 Cleaning up test documents...")
+        shutil.rmtree(test_docs_dir, ignore_errors=True)
 
 
 def test_document_ingestion(rag_system: RAGSystem) -> bool:
