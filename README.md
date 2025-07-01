@@ -1,159 +1,142 @@
 # SGLang RAG Demo
 
-A comprehensive Retrieval-Augmented Generation (RAG) system showcasing **SGLang** structured prompts and parallel processing capabilities.
+A document retrieval and question answering system built with SGLang structured prompts.
 
-## 🌟 Features
+## Features
 
-### SGLang Integration
-- **Structured Prompts**: Template-based prompt engineering for consistent, organized outputs
-- **Multi-Perspective Analysis**: Analyze queries from technical, business, and user perspectives
-- **Parallel Processing**: Async and concurrent execution for LLM operations
-- **Synthesis**: Combine multiple perspectives into comprehensive answers
+- Document processing and vector search using FAISS
+- Multi-perspective query analysis (technical, business, user viewpoints)
+- Structured prompt templates for consistent responses
+- Web interface and command-line interface
+- Support for multiple LLM providers (Groq, Together AI)
+- Parallel processing for faster responses
 
-### RAG Capabilities
-- **Document Processing**: Automatic chunking and embedding of text documents
-- **Vector Search**: FAISS-based similarity search for relevant document retrieval
-- **Multi-Provider LLM**: Support for Groq and Together AI with automatic fallback
-- **Web Interface**: Professional Streamlit-based web UI
-- **CLI Interface**: Interactive command-line interface with SGLang features
+## Installation
 
-## 🚀 Quick Start
-
-### Installation
-
-1. **Clone the repository**:
+1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd "SG Lang Demo"
+   git clone https://github.com/your-username/sglang-rag-demo.git
+   cd sglang-rag-demo
    ```
 
-2. **Create virtual environment**:
+2. Create a virtual environment:
    ```bash
    python -m venv .venv
-   .venv\Scripts\activate  # Windows
-   # or
-   source .venv/bin/activate  # Linux/Mac
+   
+   # Windows
+   .venv\Scripts\activate
+   
+   # macOS/Linux
+   source .venv/bin/activate
    ```
 
-3. **Install dependencies**:
+3. Install dependencies:
    ```bash
    pip install -e .
    ```
 
-4. **Set up API keys**:
+4. Set up API keys:
    ```bash
    cp .env.example .env
    # Edit .env with your API keys
    ```
 
-### Usage
+5. Build the document index:
+   ```bash
+   python scripts/build_index.py
+   ```
 
-#### 🔥 SGLang Multi-Perspective Analysis
+## Usage
+
+### Command Line Interface
 
 ```bash
-# Multi-perspective analysis via CLI
-sglang-rag --query "What is API authentication?" --multi-perspective --verbose
+# Basic query
+sglang-rag --query "What is API authentication?"
 
-# Interactive mode with SGLang commands
+# Multi-perspective analysis
+sglang-rag --query "What is machine learning?" --multi-perspective
+
+# Interactive mode
 sglang-rag
-# Then use: multi: What is machine learning?
 ```
 
-#### 💻 Web Interface
+### Web Interface
 
 ```bash
 sglang-web
 # Opens at http://localhost:8501
 ```
 
-#### 🧪 Quick Demo
+### Quick Demo
 
 ```bash
 python scripts/quick_demo.py
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ├── src/
-│   ├── sglang/                    # SGLang implementation
-│   │   ├── structured_prompts.py  # Template-based prompts
+│   ├── sglang_helpers/           # SGLang utilities
+│   │   ├── structured_prompts.py # Prompt templates
 │   │   └── parallel_processing.py # Async operations
-│   ├── rag_system/               # Core RAG pipeline
-│   │   ├── rag_pipeline.py       # Main pipeline with SGLang
-│   │   ├── document_processor.py # Document chunking
-│   │   ├── vector_store.py       # FAISS vector operations
-│   │   └── llm_providers.py      # Multi-provider LLM client
-│   ├── web/                      # Streamlit web interface
-│   └── sglang_demo/              # CLI interface
-├── scripts/                      # Utility scripts
-├── data/                         # Documents and vector index
-├── tests/                        # Test suite
-└── docs/                         # Documentation
+│   ├── rag_system/              # Core RAG components
+│   │   ├── rag_pipeline.py      # Main pipeline
+│   │   ├── document_processor.py # Document processing
+│   │   ├── vector_store.py      # Vector storage
+│   │   └── llm_providers.py     # LLM client
+│   ├── web/                     # Web interface
+│   └── sglang_demo/             # CLI interface
+├── scripts/                     # Utility scripts
+├── data/                        # Documents and vector index
+├── tests/                       # Tests
+└── docs/                        # Documentation
 ```
 
-## 🎯 SGLang Examples
+## How it Works
 
 ### Structured Prompts
 
-The system uses SGLang's structured prompt templates for consistent outputs:
+The system uses SGLang templates for consistent output formatting:
 
 ```python
-# Example output format:
+# Output format:
 """
-1. DIRECT ANSWER: [Clear, direct response]
-2. SUPPORTING EVIDENCE: [Quotes from context]
+1. DIRECT ANSWER: [Clear response]
+2. SUPPORTING EVIDENCE: [Relevant quotes]
 3. CONFIDENCE LEVEL: [High/Medium/Low]
 """
 ```
 
 ### Multi-Perspective Analysis
 
-Query the same question from different viewpoints:
-
-- **Technical**: Implementation details, architecture, specifications
-- **Business**: Costs, benefits, strategic considerations
-- **User**: Usability, practical applications, experience
+Analyzes queries from three viewpoints:
+- **Technical**: Implementation details and architecture
+- **Business**: Costs, benefits, and strategy
+- **User**: Practical applications and experience
 
 ### Parallel Processing
 
-```python
-# SGLang parallel processing for multiple LLM calls
-processor = ParallelProcessor(max_concurrent=5)
-results = await processor.execute_parallel(tasks)
-```
+Processes multiple LLM calls concurrently for faster responses.
 
-## 🛠️ Configuration
+## Configuration
 
-### Environment Variables
+Set up these environment variables in your `.env` file:
 
 ```bash
 # API Keys
 GROQ_API_KEY=your_groq_api_key_here
-TOGETHER_API_KEY=your_together_api_key_here
-OPENAI_API_KEY=your_openai_api_key_here  # Optional
+OPENAI_API_KEY=your_openai_api_key_here
 
-# System Settings
+# Settings
 DEFAULT_PROVIDER=groq
 MAX_TOKENS=500
 TEMPERATURE=0.3
 TOP_K_RESULTS=3
 ```
 
-### LLM Providers
-
-- **Groq**: Primary provider (fast inference)
-- **Together AI**: Fallback provider
-- **OpenAI**: Optional for embeddings
-
-## 📊 Performance Features
-
-- **Caching**: Embedding and response caching
-- **Async Processing**: Non-blocking operations
-- **Batching**: Efficient bulk operations
-- **Rate Limiting**: Respectful API usage
-
-## 🧪 Development
+## Development
 
 ### Running Tests
 
@@ -161,10 +144,10 @@ TOP_K_RESULTS=3
 pytest tests/
 ```
 
-### Building Documentation
+### Building Vector Index
 
 ```bash
-python scripts/build_docs.py
+python scripts/build_index.py
 ```
 
 ### Performance Benchmarking
@@ -173,46 +156,13 @@ python scripts/build_docs.py
 python scripts/benchmark_retrieval.py
 ```
 
-## 📈 Example Outputs
+## License
 
-### Standard Query
-```
-[?] Query: What is the vacation policy?
-[+] Answer: According to company policy, employees have unlimited PTO with minimum 3 weeks recommended per year...
-```
+Apache 2.0 License
 
-### SGLang Multi-Perspective
-```
-[?] Multi-perspective Query: What is API authentication?
+## Dependencies
 
---- TECHNICAL PERSPECTIVE ---
-API authentication uses Bearer tokens in Authorization headers...
-
---- BUSINESS PERSPECTIVE ---
-Authentication provides security and access control, reducing liability...
-
---- USER PERSPECTIVE ---
-Users need clear documentation and simple integration steps...
-
-[+] Synthesized Answer:
-API authentication combines technical security measures with business value...
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Submit a pull request
-
-## 📄 License
-
-[MIT License](LICENSE)
-
-## 🙏 Acknowledgments
-
-- **SGLang**: For structured prompting capabilities
-- **FAISS**: For efficient vector similarity search
-- **Streamlit**: For the web interface
-- **Groq & Together AI**: For LLM inference
+- FAISS for vector similarity search
+- Groq and OpenAI for language models
+- Streamlit for web interface
+- SGLang for structured prompting
