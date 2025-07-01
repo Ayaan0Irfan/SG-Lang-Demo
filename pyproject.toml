@@ -5,14 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "sglang-rag-demo"
 version = "0.1.0"
-description = "Professional RAG system with SGLang integration"
+description = "RAG system with SGLang structured prompts"
 readme = "README.md"
 license = {file = "LICENSE"}
 authors = [
-    {name = "SGLang RAG Team", email = "team@sglang-rag.com"}
+    {name = "Demo Author", email = "demo@example.com"}
 ]
 maintainers = [
-    {name = "SGLang RAG Team", email = "team@sglang-rag.com"}
+    {name = "Demo Author", email = "demo@example.com"}
 ]
 keywords = ["rag", "llm", "sglang", "vector-search", "ai"]
 classifiers = [
@@ -72,7 +72,7 @@ Issues = "https://github.com/sglang-rag/demo/issues"
 
 [project.scripts]
 sglang-rag = "sglang_demo.cli:main"
-sglang-web = "sglang_demo.cli:web_main"
+sglang-web = "web.app:run_app"
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -190,4 +190,4 @@ ignore = [
 "src/sglang/*" = ["T201"]  # Allow print statements in sglang modules
 
 [tool.setuptools]
-py_modules = ["config"]
+py-modules = ["config"]
